@@ -1,6 +1,6 @@
 # SPEC 01 — Servidor, base de datos y API REST
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depende de:** —
 > **Fecha:** 2026-11-26
 > **Objetivo:** Levantar un servidor Node.js + Express con SQLite que exponga la API REST de eventos y asistencias, con todas sus validaciones, y que cree datos de prueba al primer arranque.

@@ -1,0 +1,23 @@
+{
+  "name": "asistqr",
+  "version": "1.0.0",
+  "description": "AsistQR — PWA de control de asistencia con QR y geolocalización",
+  "main": "server/index.js",
+  "type": "commonjs",
+  "private": true,
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22.9"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "express": "^5.3.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.2"
+  }
+}
