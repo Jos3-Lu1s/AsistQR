@@ -1,7 +1,9 @@
+const path = require('node:path');
 const express = require('express');
 const config = require('./config');
 const rutasEventos = require('./rutas/eventos');
 const rutasAsistencias = require('./rutas/asistencias');
+const rutasVistas = require('./rutas/vistas');
 
 /**
  * Crea la aplicación Express sin abrir puertos.
@@ -12,7 +14,12 @@ function crearApp({ db }) {
 
   app.locals.db = db; // Disponible en las rutas como req.app.locals.db.
 
+  // Vistas generadas en el servidor.
+  app.set('view engine', 'ejs');
+  app.set('views', path.join(__dirname, 'vistas'));
+
   app.use(express.json());
+  app.use(express.urlencoded({ extended: false })); // Formularios HTML (PIN de la lista).
   app.use(express.static(config.DIR_PUBLIC)); // Archivos de la PWA.
 
   // Comprueba que el servidor responde.
@@ -22,6 +29,7 @@ function crearApp({ db }) {
 
   app.use('/api/eventos', rutasEventos);
   app.use('/api/asistencias', rutasAsistencias);
+  app.use('/eventos', rutasVistas);
 
   return app;
 }

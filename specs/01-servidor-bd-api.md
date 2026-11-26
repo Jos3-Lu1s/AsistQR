@@ -171,25 +171,25 @@ Solo se insertan si `SELECT COUNT(*) FROM eventos` devuelve 0:
 
 ## Criterios de aceptación
 
-- [ ] `npm install` y `npm start` funcionan en Windows con Node 22.12 sin compilar nada a mano.
-- [ ] `GET http://localhost:3000/` sirve `public/index.html`.
-- [ ] Al primer arranque se crea `server/data/asistqr.db` con las tablas `eventos` y `asistencias`.
-- [ ] Al primer arranque existen exactamente 2 eventos de prueba. Al reiniciar el servidor siguen siendo 2.
-- [ ] Ninguna respuesta de `GET /api/eventos` ni de `GET /api/eventos/:id` contiene la propiedad `token`.
-- [ ] Toda petición a un endpoint con PIN sin el header `X-PIN` correcto responde 401 `pin_invalido`.
-- [ ] Crear, modificar y eliminar un evento con PIN responde 201, 200 y 204, respectivamente.
-- [ ] Eliminar un evento elimina también sus asistencias.
-- [ ] `GET /api/eventos/:id/qr` devuelve un token de 6 caracteres del alfabeto permitido y un data URL PNG.
-- [ ] Registrar una asistencia con token en minúsculas funciona igual que con mayúsculas.
-- [ ] Repetir un POST con el mismo `uuid` responde 200 `duplicado: true` y no crea una fila nueva.
-- [ ] Un token inexistente responde 404 `token_invalido`.
-- [ ] La misma matrícula en el mismo evento con otro `uuid` responde 409 `ya_registrado` e incluye el registro existente.
-- [ ] Una captura 11 minutos antes del inicio o después del fin queda como `fuera_de_horario`.
-- [ ] Un registro sin ubicación dentro del horario queda como `sin_ubicacion`.
-- [ ] Un registro a más de `radio_m + min(precision, 100)` metros queda como `fuera_de_rango`.
-- [ ] Un registro dentro del horario y del radio queda como `valida`.
-- [ ] `GET /api/asistencias?matricula=X` devuelve solo registros de X, cada uno con `evento_nombre`.
-- [ ] `npm test` pasa todos los tests sin errores.
+- [x] `npm install` y `npm start` funcionan en Windows con Node 22.12 sin compilar nada a mano.
+- [x] `GET http://localhost:3000/` sirve `public/index.html`.
+- [x] Al primer arranque se crea `server/data/asistqr.db` con las tablas `eventos` y `asistencias`.
+- [x] Al primer arranque existen exactamente 2 eventos de prueba. Al reiniciar el servidor siguen siendo 2.
+- [x] Ninguna respuesta de `GET /api/eventos` ni de `GET /api/eventos/:id` contiene la propiedad `token`.
+- [x] Toda petición a un endpoint con PIN sin el header `X-PIN` correcto responde 401 `pin_invalido`.
+- [x] Crear, modificar y eliminar un evento con PIN responde 201, 200 y 204, respectivamente.
+- [x] Eliminar un evento elimina también sus asistencias.
+- [x] `GET /api/eventos/:id/qr` devuelve un token de 6 caracteres del alfabeto permitido y un data URL PNG.
+- [x] Registrar una asistencia con token en minúsculas funciona igual que con mayúsculas.
+- [x] Repetir un POST con el mismo `uuid` responde 200 `duplicado: true` y no crea una fila nueva.
+- [x] Un token inexistente responde 404 `token_invalido`.
+- [x] La misma matrícula en el mismo evento con otro `uuid` responde 409 `ya_registrado` e incluye el registro existente.
+- [x] Una captura 11 minutos antes del inicio o después del fin queda como `fuera_de_horario`.
+- [x] Un registro sin ubicación dentro del horario queda como `sin_ubicacion`.
+- [x] Un registro a más de `radio_m + min(precision, 100)` metros queda como `fuera_de_rango`.
+- [x] Un registro dentro del horario y del radio queda como `valida`.
+- [x] `GET /api/asistencias?matricula=X` devuelve solo registros de X, cada uno con `evento_nombre`.
+- [x] `npm test` pasa todos los tests sin errores.
 
 ---
 

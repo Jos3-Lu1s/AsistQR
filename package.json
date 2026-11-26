@@ -6,6 +6,9 @@
   "type": "commonjs",
   "private": true,
   "scripts": {
+    "build:css": "tailwindcss -i server/estilos/entrada.css -o public/css/estilos.css --minify",
+    "dev:css": "tailwindcss -i server/estilos/entrada.css -o public/css/estilos.css --watch",
+    "prestart": "npm run build:css",
     "start": "node --env-file-if-exists=.env server/index.js",
     "test": "node --test"
   },
@@ -14,10 +17,13 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.11.1",
+    "ejs": "^7.0.2",
     "express": "^5.3.0",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "supertest": "^7.3.2"
+    "@tailwindcss/cli": "^4.3.5",
+    "supertest": "^7.3.2",
+    "tailwindcss": "^4.3.5"
   }
 }
