@@ -125,6 +125,10 @@ El horario se valida con `capturadaEn` (hora del escaneo), no con la hora de lle
 
 - `GET /api/salud` → `{ "ok": true }`
 
+### Postman
+
+Importa `postman/AsistQR.postman_collection.json`. Ajusta las variables `baseUrl` y `pin` de la colección. Para seguir el flujo, ejecuta en orden **Crear evento → Obtener QR → Registrar asistencia**: cada paso guarda `eventoId`, `token` y `asistenciaId` para las peticiones siguientes.
+
 ## Lista de asistencia (vista del servidor)
 
 `/eventos/:id/lista` pide el PIN del organizador y genera en el servidor la lista del evento: resumen por estado y tabla de asistentes ordenada por nombre, lista para imprimir o guardar en PDF.

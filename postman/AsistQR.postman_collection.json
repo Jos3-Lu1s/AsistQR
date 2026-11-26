@@ -1,0 +1,240 @@
+{
+  "info": {
+    "name": "AsistQR",
+    "description": "API REST de AsistQR. Ajusta las variables `baseUrl` y `pin` de la colección antes de empezar.\n\nFlujo sugerido: Crear evento → Obtener QR → Registrar asistencia → Asistentes del evento.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "pin", "value": "1234" },
+    { "key": "eventoId", "value": "1" },
+    { "key": "token", "value": "" },
+    { "key": "asistenciaId", "value": "" },
+    { "key": "matricula", "value": "UTP0123456" }
+  ],
+  "item": [
+    {
+      "name": "Salud",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/salud"
+      }
+    },
+    {
+      "name": "Eventos",
+      "item": [
+        {
+          "name": "Listar eventos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/eventos"
+          }
+        },
+        {
+          "name": "Detalle de evento",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/eventos/{{eventoId}}"
+          }
+        },
+        {
+          "name": "Crear evento",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Evento activo: empezó hace 10 min y termina en 2 h.",
+                  "const ahora = Date.now();",
+                  "pm.variables.set('inicio', new Date(ahora - 10 * 60 * 1000).toISOString());",
+                  "pm.variables.set('fin', new Date(ahora + 2 * 60 * 60 * 1000).toISOString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('eventoId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-PIN", "value": "{{pin}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Tutoría Grupal 5A\",\n  \"descripcion\": \"Sesión de tutoría\",\n  \"lugar\": \"Edificio de TI, aula 5A\",\n  \"inicio\": \"{{inicio}}\",\n  \"fin\": \"{{fin}}\",\n  \"latitud\": 19.0414,\n  \"longitud\": -98.2063,\n  \"radio_m\": 150\n}"
+            },
+            "url": "{{baseUrl}}/api/eventos"
+          }
+        },
+        {
+          "name": "Modificar evento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-PIN", "value": "{{pin}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Tutoría Grupal 5A (editado)\",\n  \"descripcion\": \"\",\n  \"lugar\": \"Aula 5B\",\n  \"inicio\": \"2026-11-28T16:00:00Z\",\n  \"fin\": \"2026-11-28T18:00:00Z\",\n  \"latitud\": 19.0414,\n  \"longitud\": -98.2063,\n  \"radio_m\": 100\n}"
+            },
+            "url": "{{baseUrl}}/api/eventos/{{eventoId}}"
+          }
+        },
+        {
+          "name": "Obtener QR",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) pm.collectionVariables.set('token', pm.response.json().token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-PIN", "value": "{{pin}}" }],
+            "url": "{{baseUrl}}/api/eventos/{{eventoId}}/qr"
+          }
+        },
+        {
+          "name": "Asistentes del evento",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-PIN", "value": "{{pin}}" }],
+            "url": "{{baseUrl}}/api/eventos/{{eventoId}}/asistencias"
+          }
+        },
+        {
+          "name": "Eliminar evento",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "X-PIN", "value": "{{pin}}" }],
+            "url": "{{baseUrl}}/api/eventos/{{eventoId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Asistencias",
+      "item": [
+        {
+          "name": "Registrar asistencia",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// uuid nuevo y hora actual en cada envío.",
+                  "pm.variables.set('uuid', pm.variables.replaceIn('{{$guid}}'));",
+                  "pm.variables.set('capturadaEn', new Date().toISOString());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('asistenciaId', pm.response.json().asistencia.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uuid\": \"{{uuid}}\",\n  \"token\": \"{{token}}\",\n  \"matricula\": \"{{matricula}}\",\n  \"nombre\": \"Ana López\",\n  \"capturadaEn\": \"{{capturadaEn}}\",\n  \"latitud\": 19.0415,\n  \"longitud\": -98.2062,\n  \"precision\": 12,\n  \"offline\": false\n}"
+            },
+            "url": "{{baseUrl}}/api/asistencias"
+          }
+        },
+        {
+          "name": "Registrar asistencia sin ubicación",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set('uuid', pm.variables.replaceIn('{{$guid}}'));",
+                  "pm.variables.set('capturadaEn', new Date().toISOString());"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uuid\": \"{{uuid}}\",\n  \"token\": \"{{token}}\",\n  \"matricula\": \"UTP0999999\",\n  \"nombre\": \"Luis Pérez\",\n  \"capturadaEn\": \"{{capturadaEn}}\",\n  \"offline\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/asistencias"
+          }
+        },
+        {
+          "name": "Historial de alumno",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/asistencias?matricula={{matricula}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "asistencias"],
+              "query": [{ "key": "matricula", "value": "{{matricula}}" }]
+            }
+          }
+        },
+        {
+          "name": "Eliminar asistencia",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "X-PIN", "value": "{{pin}}" }],
+            "url": "{{baseUrl}}/api/asistencias/{{asistenciaId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vistas del servidor",
+      "item": [
+        {
+          "name": "Formulario de PIN",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/eventos/{{eventoId}}/lista"
+          }
+        },
+        {
+          "name": "Lista de asistencia (HTML)",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [{ "key": "pin", "value": "{{pin}}" }]
+            },
+            "url": "{{baseUrl}}/eventos/{{eventoId}}/lista"
+          }
+        }
+      ]
+    }
+  ]
+}
