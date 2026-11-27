@@ -4,6 +4,7 @@ const config = require('./config');
 const rutasEventos = require('./rutas/eventos');
 const rutasAsistencias = require('./rutas/asistencias');
 const rutasVistas = require('./rutas/vistas');
+const rutasPin = require('./rutas/pin');
 
 /**
  * Crea la aplicación Express sin abrir puertos.
@@ -29,6 +30,7 @@ function crearApp({ db }) {
 
   app.use('/api/eventos', rutasEventos);
   app.use('/api/asistencias', rutasAsistencias);
+  app.use('/api/pin', rutasPin);
   app.use('/eventos', rutasVistas);
 
   return app;

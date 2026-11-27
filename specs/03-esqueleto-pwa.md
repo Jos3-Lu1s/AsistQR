@@ -1,6 +1,6 @@
 # SPEC 03 — Esqueleto de la PWA
 
-> **Estado:** Borrador
+> **Estado:** Implementado
 > **Depende de:** SPEC 01, SPEC 02
 > **Fecha:** 2026-11-26
 > **Objetivo:** Construir la cáscara de la PWA: un splash que prepara la app, un perfil guardado en LocalStorage, un home por rol y la navegación entre vistas, con manifest e íconos.

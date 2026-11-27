@@ -5,8 +5,22 @@
 @source "../vistas";
 @source "../../public/**/*.{html,js}";
 
-/* Colores de la identidad visual de AsistQR (clases bg-marca, text-marca, bg-fondo…). */
 @theme {
+  /* Colores de la identidad visual de AsistQR (clases bg-marca, text-marca, bg-fondo…). */
   --color-marca: #1a73e8;
   --color-fondo: #f0f2f5;
+
+  /* Animación de entrada del splash (clase animate-entrada): aparece subiendo y creciendo un poco. */
+  --animate-entrada: entrada 0.7s ease-out both;
+
+  @keyframes entrada {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }

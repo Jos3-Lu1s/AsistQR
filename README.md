@@ -123,11 +123,61 @@ El horario se valida con `capturadaEn` (hora del escaneo), no con la hora de lle
 
 ### Otros
 
-- `GET /api/salud` → `{ "ok": true }`
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/api/salud` | `{ "ok": true }` si el servidor responde |
+| `GET` | `/api/pin` 🔒 | Verifica el PIN del organizador: `204` si es correcto, `401 pin_invalido` si no |
 
 ### Postman
 
 Importa `postman/AsistQR.postman_collection.json`. Ajusta las variables `baseUrl` y `pin` de la colección. Para seguir el flujo, ejecuta en orden **Crear evento → Obtener QR → Registrar asistencia**: cada paso guarda `eventoId`, `token` y `asistenciaId` para las peticiones siguientes.
+
+Además incluye **PIN de organizador** (PIN correcto e incorrecto) y **Archivos de la PWA** (manifest, splash, app e ícono). Cada petición trae pruebas que se ven en la pestaña *Test Results*.
+
+## La PWA
+
+Abre `http://localhost:3000/splash.html` (es el `start_url` del manifest).
+
+1. **Splash:** muestra el logo y el lema mientras la app se prepara (al menos 1 s) y abre la app.
+2. **Perfil:** la primera vez pide quién eres. El alumno da su matrícula y nombre; el organizador, su nombre y el PIN, que se verifica con el servidor.
+3. **Inicio:** saludo y accesos según el rol.
+
+La app es una sola página (`index.html`) que cambia de vista con el hash de la URL:
+
+| Ruta | Rol | Vista |
+|---|---|---|
+| `#/inicio` | Ambos | Saludo y accesos |
+| `#/perfil` | Ambos | Crear o editar el perfil |
+| `#/escanear` | Alumno | Escanear QR *(en construcción)* |
+| `#/historial` | Alumno | Mi historial *(en construcción)* |
+| `#/eventos` | Alumno | Eventos *(en construcción)* |
+| `#/mis-eventos` | Organizador | Mis eventos *(en construcción)* |
+| `#/nuevo-evento` | Organizador | Nuevo evento *(en construcción)* |
+| `#/listas` | Organizador | Lista de asistencia *(en construcción)* |
+
+- Sin perfil, cualquier ruta lleva a `#/perfil`.
+- Una ruta que no existe o que es de otro rol lleva a `#/inicio`.
+- La barra superior muestra si hay conexión (**En línea** / **Sin conexión**) y se actualiza sola.
+
+### Datos en el dispositivo (LocalStorage)
+
+| Clave | Contenido |
+|---|---|
+| `asistqr:perfil` | `{ "rol": "alumno", "nombre": "…", "matricula": "…" }` (el organizador no lleva matrícula) |
+| `asistqr:pin` | PIN verificado del organizador (se borra al cambiar a alumno) |
+
+Para empezar de cero, ejecuta `localStorage.clear()` en la consola del navegador.
+
+### Logo e íconos
+
+`public/img/logo.svg` es el logo fuente. Los íconos PNG del manifest se generaron una sola vez a partir de él, sin agregar dependencias al proyecto:
+
+```bash
+npx --yes sharp-cli -i public/img/logo.svg -o public/img/icono-512.png resize 512 512
+npx --yes sharp-cli -i public/img/logo.svg -o public/img/icono-192.png resize 192 192
+```
+
+Vuelve a ejecutarlos si cambias el logo.
 
 ## Lista de asistencia (vista del servidor)
 
@@ -142,12 +192,19 @@ server/
   config.js       Variables de entorno
   db.js           Esquema SQLite
   seed.js         Eventos de prueba
-  rutas/          API (eventos, asistencias) y vistas
+  rutas/          API (eventos, asistencias, pin) y vistas
   middleware/     Validación del PIN
   lib/            Token, distancia (Haversine), formato, resumen
   vistas/         Plantillas EJS
-  estilos/        Entrada de Tailwind
-public/           Archivos de la PWA
+  estilos/        Entrada de Tailwind (colores de la marca y animación del splash)
+public/
+  splash.html     Pantalla de arranque
+  index.html      App de una sola página
+  manifest.json   Manifest de la PWA
+  img/            Logo SVG e íconos PNG
+  js/             Módulos ES del cliente (router, almacén, API, conexión)
+    vistas/       Inicio, Perfil y "En construcción"
+  css/            Hoja compilada por Tailwind (generada, no se sube)
 test/             Pruebas (node:test + supertest)
 specs/            Especificaciones por fase
 ```
@@ -158,7 +215,7 @@ specs/            Especificaciones por fase
 npm test
 ```
 
-Usan una base de datos en memoria; no tocan `server/data/`.
+Usan una base de datos en memoria; no tocan `server/data/`. Cubren la API, la lista de asistencia y la entrega de los archivos de la PWA (manifest, splash e íconos). La interfaz de la PWA se prueba a mano en el navegador.
 
 ## Probar desde el celular
 

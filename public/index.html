@@ -3,11 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1a73e8">
+  <meta name="description" content="Tu asistencia en un escaneo">
   <title>AsistQR</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/img/icono-192.png">
+  <link rel="icon" type="image/svg+xml" href="/img/logo.svg">
+  <link rel="stylesheet" href="/css/estilos.css">
 </head>
-<body>
-  <h1>AsistQR</h1>
-  <!-- Página provisional hasta que exista la interfaz de la PWA. -->
-  <p>Tu asistencia en un escaneo.</p>
+<body class="min-h-screen bg-fondo text-slate-800 antialiased">
+  <!-- Barra superior: volver al inicio, título de la vista e indicador de conexión. -->
+  <header class="sticky top-0 z-10 bg-marca text-white shadow-md">
+    <div class="mx-auto flex h-14 max-w-5xl items-center gap-2 px-2 sm:px-4">
+      <a id="volver" href="#/inicio" aria-label="Volver al inicio" hidden
+         class="flex size-10 items-center justify-center rounded-full text-2xl hover:bg-white/15">←</a>
+      <h1 id="titulo" class="flex-1 truncate px-2 text-lg font-semibold">AsistQR</h1>
+      <span id="conexion" role="status" aria-live="polite"
+            class="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium"></span>
+    </div>
+  </header>
+
+  <!-- Contenedor donde el router pinta la vista actual. -->
+  <main id="vista" class="mx-auto max-w-5xl p-4 sm:p-6"></main>
+
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1a73e8">
+  <title>AsistQR</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/img/icono-192.png">
+  <link rel="icon" type="image/svg+xml" href="/img/logo.svg">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<!-- Pantalla de arranque: se muestra mientras la app se prepara y luego redirige a index.html. -->
+<body class="flex min-h-screen flex-col items-center justify-center bg-marca p-6 text-center text-white">
+  <img src="/img/logo.svg" alt="" width="128" height="128"
+       class="size-32 rounded-[28%] shadow-2xl ring-4 ring-white/20 motion-safe:animate-entrada">
+  <h1 class="mt-6 text-4xl font-bold tracking-tight motion-safe:animate-entrada motion-safe:[animation-delay:150ms]">
+    AsistQR
+  </h1>
+  <p class="mt-2 text-lg text-white/85 motion-safe:animate-entrada motion-safe:[animation-delay:300ms]">
+    Tu asistencia en un escaneo
+  </p>
+  <p class="mt-10 text-sm text-white/70 motion-safe:animate-pulse" role="status">Preparando…</p>
+
+  <script type="module" src="/js/splash.js"></script>
+</body>
+</html>
