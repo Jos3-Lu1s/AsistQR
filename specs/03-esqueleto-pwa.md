@@ -197,32 +197,32 @@ test/pwa.test.js
 
 ## Criterios de aceptación
 
-- [ ] `public/img/icono-192.png` mide 192×192 e `icono-512.png` mide 512×512.
-- [ ] `package.json` no gana dependencias para generar los íconos.
-- [ ] `GET /api/pin` con el PIN correcto responde 204. Sin PIN o con PIN incorrecto responde 401 `pin_invalido`.
-- [ ] DevTools → Application → Manifest muestra nombre "AsistQR", color `#1a73e8`, los íconos de 192 y 512 y ningún error del manifest.
-- [ ] Abrir `/splash.html` muestra el logo, "AsistQR" y "Tu asistencia en un escaneo" con animación de entrada.
-- [ ] El splash dura al menos 1 s y luego redirige a `/index.html#/inicio` si hay perfil, o a `#/perfil` si no hay.
-- [ ] El botón Atrás del navegador no regresa al splash (se usa `location.replace`).
-- [ ] Sin perfil guardado, cualquier ruta (incluso `#/inicio` o `#/mis-eventos`) termina en `#/perfil`.
-- [ ] Guardar un perfil de alumno sin matrícula o sin nombre muestra un error y no guarda nada.
-- [ ] Guardar un perfil de alumno escribe `asistqr:perfil` con `rol`, `nombre` y `matricula`, y lleva a `#/inicio`.
-- [ ] Guardar un perfil de organizador con PIN incorrecto muestra "PIN incorrecto" y no guarda nada.
-- [ ] Guardar un perfil de organizador sin conexión muestra "Se necesita conexión para verificar el PIN" y no guarda nada.
-- [ ] Guardar un perfil de organizador con el PIN correcto escribe `asistqr:perfil` (sin matrícula) y `asistqr:pin`.
-- [ ] Cambiar un perfil de organizador a alumno borra `asistqr:pin`.
-- [ ] El home de alumno saluda con su nombre y muestra Escanear QR, Mi historial, Eventos y Perfil.
-- [ ] El home de organizador muestra Mis eventos, Nuevo evento, Lista de asistencia y Perfil.
-- [ ] Un alumno que escribe `#/mis-eventos` en la barra es redirigido a `#/inicio`.
-- [ ] Una ruta inexistente (`#/xyz`) redirige a `#/inicio`.
-- [ ] Cada tarjeta lleva a su ruta, que muestra "En construcción" con su título en la barra y un botón para volver.
-- [ ] El botón Atrás del navegador regresa a la vista anterior dentro de la app.
-- [ ] Recargar en `#/perfil` o en una vista "En construcción" mantiene esa vista.
-- [ ] El indicador cambia entre "En línea" y "Sin conexión" al activar o desactivar "Offline" en DevTools, sin recargar.
-- [ ] El home se ve en 1 columna a 375 px de ancho, en 2 columnas a 768 px y en 3 columnas a 1280 px, sin desplazamiento horizontal.
-- [ ] Los datos del perfil siguen ahí al cerrar y volver a abrir el navegador.
-- [ ] La consola del navegador no muestra errores al recorrer todas las rutas.
-- [ ] `npm test` pasa todos los tests: los anteriores y los de `test/pwa.test.js`.
+- [x] `public/img/icono-192.png` mide 192×192 e `icono-512.png` mide 512×512.
+- [x] `package.json` no gana dependencias para generar los íconos.
+- [x] `GET /api/pin` con el PIN correcto responde 204. Sin PIN o con PIN incorrecto responde 401 `pin_invalido`.
+- [x] DevTools → Application → Manifest muestra nombre "AsistQR", color `#1a73e8`, los íconos de 192 y 512 y ningún error del manifest.
+- [x] Abrir `/splash.html` muestra el logo, "AsistQR" y "Tu asistencia en un escaneo" con animación de entrada.
+- [x] El splash dura al menos 1 s y luego redirige a `/index.html#/inicio` si hay perfil, o a `#/perfil` si no hay.
+- [x] El botón Atrás del navegador no regresa al splash (se usa `location.replace`).
+- [x] Sin perfil guardado, cualquier ruta (incluso `#/inicio` o `#/mis-eventos`) termina en `#/perfil`.
+- [x] Guardar un perfil de alumno sin matrícula o sin nombre muestra un error y no guarda nada.
+- [x] Guardar un perfil de alumno escribe `asistqr:perfil` con `rol`, `nombre` y `matricula`, y lleva a `#/inicio`.
+- [x] Guardar un perfil de organizador con PIN incorrecto muestra "PIN incorrecto" y no guarda nada.
+- [x] Guardar un perfil de organizador sin conexión muestra "Se necesita conexión para verificar el PIN" y no guarda nada.
+- [x] Guardar un perfil de organizador con el PIN correcto escribe `asistqr:perfil` (sin matrícula) y `asistqr:pin`.
+- [x] Cambiar un perfil de organizador a alumno borra `asistqr:pin`.
+- [x] El home de alumno saluda con su nombre y muestra Escanear QR, Mi historial, Eventos y Perfil.
+- [x] El home de organizador muestra Mis eventos, Nuevo evento, Lista de asistencia y Perfil.
+- [x] Un alumno que escribe `#/mis-eventos` en la barra es redirigido a `#/inicio`.
+- [x] Una ruta inexistente (`#/xyz`) redirige a `#/inicio`.
+- [x] Cada tarjeta lleva a su ruta, que muestra "En construcción" con su título en la barra y un botón para volver.
+- [x] El botón Atrás del navegador regresa a la vista anterior dentro de la app.
+- [x] Recargar en `#/perfil` o en una vista "En construcción" mantiene esa vista.
+- [x] El indicador cambia entre "En línea" y "Sin conexión" al activar o desactivar "Offline" en DevTools, sin recargar.
+- [x] El home se ve en 1 columna a 375 px de ancho, en 2 columnas a 768 px y en 3 columnas a 1280 px, sin desplazamiento horizontal.
+- [x] Los datos del perfil siguen ahí al cerrar y volver a abrir el navegador.
+- [x] La consola del navegador no muestra errores al recorrer todas las rutas.
+- [x] `npm test` pasa todos los tests: los anteriores y los de `test/pwa.test.js`.
 
 ---
 

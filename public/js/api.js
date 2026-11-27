@@ -18,7 +18,8 @@ export async function verificarPin(pin) {
 
 /**
  * Hace una petición a la API y la convierte a un resultado uniforme:
- * { ok: true, datos } o { ok: false, error, mensaje?, detalles? }.
+ * { ok: true, datos } o { ok: false, error, mensaje?, detalles?, datos? }.
+ * En los errores, datos es el cuerpo completo de la respuesta (el 409 trae la asistencia existente).
  */
 async function pedir(ruta, { metodo = 'GET', cuerpo, conPin = false } = {}) {
   const headers = {};
@@ -52,6 +53,7 @@ async function pedir(ruta, { metodo = 'GET', cuerpo, conPin = false } = {}) {
     error: datos?.error ?? 'inesperado',
     mensaje: datos?.mensaje,
     detalles: datos?.detalles,
+    datos,
   };
 }
 
@@ -72,6 +74,11 @@ export const listarAsistentes = (id) => pedir(`/api/eventos/${id}/asistencias`, 
 
 export const eliminarAsistencia = (id) =>
   pedir(`/api/asistencias/${id}`, { metodo: 'DELETE', conPin: true });
+
+export const registrarAsistencia = (cuerpo) => pedir('/api/asistencias', { metodo: 'POST', cuerpo });
+
+export const listarHistorial = (matricula) =>
+  pedir(`/api/asistencias?matricula=${encodeURIComponent(matricula)}`);
 
 /**
  * Abre la lista de asistencia SSR en otra pestaña enviando el PIN guardado por POST.

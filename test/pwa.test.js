@@ -83,3 +83,44 @@ test('los módulos de las vistas del organizador se sirven como JavaScript', asy
     assert.match(res.headers['content-type'], /javascript/, ruta);
   }
 });
+
+test('el lector de QR se sirve como JavaScript y index.html lo carga', async () => {
+  const { app } = crearAppPrueba();
+  const res = await request(app).get('/vendor/jsQR.js');
+  assert.equal(res.status, 200);
+  assert.match(res.headers['content-type'], /javascript/);
+
+  const indice = await request(app).get('/');
+  assert.ok(indice.text.includes('<script src="/vendor/jsQR.js"></script>'));
+});
+
+test('los módulos de las vistas del alumno se sirven como JavaScript', async () => {
+  const { app } = crearAppPrueba();
+  const modulos = [
+    '/js/registro.js',
+    '/js/sincronizacion.js',
+    '/js/escaner.js',
+    '/js/vibracion.js',
+    '/js/pendientes.js',
+    '/js/vistas/escanear.js',
+    '/js/vistas/historial.js',
+    '/js/vistas/eventos.js',
+  ];
+  for (const ruta of modulos) {
+    const res = await request(app).get(ruta);
+    assert.equal(res.status, 200, ruta);
+    assert.match(res.headers['content-type'], /javascript/, ruta);
+  }
+});
+
+test('la vista "En construcción" ya no existe', async () => {
+  const { app } = crearAppPrueba();
+  const res = await request(app).get('/js/vistas/en-construccion.js');
+  assert.equal(res.status, 404);
+});
+
+test('index.html tiene el contador de pendientes en la barra', async () => {
+  const { app } = crearAppPrueba();
+  const res = await request(app).get('/');
+  assert.match(res.text, /<span id="pendientes"[^>]*hidden/);
+});

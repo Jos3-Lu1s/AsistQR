@@ -1,4 +1,5 @@
 // Vista Inicio: saludo y accesos según el rol.
+import { EVENTO_COLA, leerCola } from '../almacen.js';
 
 // Tarjetas de acceso de cada rol, en el orden en que se muestran.
 const ACCESOS = {
@@ -36,10 +37,25 @@ export function pintar(contenedor, { perfil }) {
           <span>
             <span class="block text-lg font-semibold">${acceso.titulo}</span>
             <span class="block text-sm text-slate-600">${acceso.texto}</span>
+            ${acceso.ruta === '#/historial'
+              ? '<span data-por-enviar hidden class="mt-1 inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800"></span>'
+              : ''}
           </span>
         </a>
       `).join('')}
     </nav>
   `;
   contenedor.querySelector('[data-nombre]').textContent = perfil.nombre; // Dato del usuario: nunca como HTML.
+
+  // "N por enviar" en la tarjeta Mi historial (solo existe para el alumno).
+  const porEnviar = contenedor.querySelector('[data-por-enviar]');
+  if (!porEnviar) return;
+  const pintarPorEnviar = () => {
+    const total = leerCola().length;
+    porEnviar.textContent = `${total} por enviar`;
+    porEnviar.hidden = total === 0;
+  };
+  pintarPorEnviar();
+  window.addEventListener(EVENTO_COLA, pintarPorEnviar);
+  return () => window.removeEventListener(EVENTO_COLA, pintarPorEnviar);
 }

@@ -1,6 +1,6 @@
 # SPEC 04 — Vistas del organizador
 
-> **Estado:** aprobado
+> **Estado:** Implementado
 > **Depende de:** SPEC 01, SPEC 02, SPEC 03
 > **Fecha:** 2026-11-26
 > **Objetivo:** Reemplazar las vistas "En construcción" del organizador por vistas con datos de la API: Mis eventos, formulario para crear y editar, QR con contador en vivo, asistentes y acceso a la lista SSR.
@@ -282,39 +282,39 @@ README.md                      ← + sección de las vistas del organizador
 
 ## Criterios de aceptación
 
-- [ ] `#/eventos/abc/qr`, `#/eventos/0/qr` y `#/eventos/3/xyz` redirigen a `#/inicio`.
-- [ ] Un alumno que escribe `#/eventos/1/qr` o `#/mis-eventos` es redirigido a `#/inicio`.
-- [ ] Mis eventos muestra los eventos de `GET /api/eventos` con nombre, lugar, horario y la etiqueta Próximo, En curso o Terminado correcta.
-- [ ] Con la base sin eventos, Mis eventos muestra "Aún no hay eventos" y el botón "Crear el primero".
-- [ ] Después de abrir Mis eventos con conexión, `asistqr:eventos` contiene el listado y `guardadoEn`.
-- [ ] Con DevTools en Offline, Mis eventos muestra los eventos guardados, el aviso "Sin conexión · datos guardados el …" y los botones de acción deshabilitados.
-- [ ] Offline y sin `asistqr:eventos`, Mis eventos muestra el error de conexión y el botón "Reintentar".
-- [ ] Cancelar el `confirm()` de eliminar no borra nada.
-- [ ] Aceptar el `confirm()` elimina el evento en el servidor, quita su tarjeta sin recargar y lo quita de `asistqr:eventos`.
-- [ ] Guardar el formulario sin nombre, con `fin` anterior a `inicio` o con latitud fuera de rango muestra el error junto al campo y no hace ninguna petición.
-- [ ] Crear un evento válido responde 201 y lleva a `#/eventos/:id/qr` del evento nuevo.
-- [ ] `#/eventos/:id/editar` aparece precargado con los datos del evento y la hora local correcta.
-- [ ] Editar y guardar lleva a `#/mis-eventos` con los datos actualizados.
-- [ ] Un evento creado a las 10:00 locales se muestra a las 10:00 en Mis eventos y en el formulario de edición.
-- [ ] "Usar mi ubicación" llena latitud y longitud con 6 decimales y muestra la precisión.
-- [ ] Al negar el permiso de ubicación aparece el mensaje de permiso negado y los campos siguen editables.
-- [ ] Con un PIN guardado incorrecto, crear, editar, eliminar o ver el QR muestra "Tu PIN ya no es válido. Actualízalo en Perfil." con el enlace.
-- [ ] Sin conexión, guardar el formulario muestra "Se necesita conexión para esta acción." y no guarda nada.
-- [ ] La vista QR muestra la imagen del QR, el token de 6 caracteres y el contador de asistentes.
-- [ ] Registrar una asistencia desde Postman hace que el contador del QR suba en 5 s o menos sin recargar.
-- [ ] Con la pestaña oculta, la pestaña Red de DevTools no muestra peticiones a `/asistencias`. Al volver, se pide de inmediato.
-- [ ] Después de salir de la vista QR o de Asistentes no se hacen más peticiones a `/asistencias`.
-- [ ] Si se corta la conexión en la vista QR, el contador conserva el último valor y aparece "Sin conexión · último dato …". Al reconectar se actualiza solo.
-- [ ] "Pantalla completa" muestra solo el nombre, el QR, el token y el contador. Esc regresa a la vista normal.
-- [ ] Asistentes lista cada registro con nombre, matrícula, hora, etiqueta de estado y la marca "Sincronizado" cuando `offline` es verdadero.
-- [ ] Eliminar un registro tras el `confirm()` lo quita de la lista al instante y el total baja en 1.
-- [ ] Abrir el QR de un evento eliminado muestra "El evento ya no existe." con el enlace a Mis eventos.
-- [ ] En `#/listas`, "Abrir lista" abre en otra pestaña la lista SSR del evento sin pedir el PIN.
-- [ ] Los botones "Lista de asistencia" de las vistas QR y Asistentes abren la misma lista SSR.
-- [ ] Un evento cuyo nombre es `<b>x</b>` se muestra como texto literal en todas las vistas.
-- [ ] Las vistas Mis eventos, QR y Asistentes se ven sin desplazamiento horizontal a 375 px, 768 px y 1280 px.
-- [ ] La consola del navegador no muestra errores al recorrer todas las rutas del organizador.
-- [ ] `npm test` pasa todos los tests: los anteriores y los nuevos de `test/pwa.test.js`.
+- [x] `#/eventos/abc/qr`, `#/eventos/0/qr` y `#/eventos/3/xyz` redirigen a `#/inicio`.
+- [x] Un alumno que escribe `#/eventos/1/qr` o `#/mis-eventos` es redirigido a `#/inicio`.
+- [x] Mis eventos muestra los eventos de `GET /api/eventos` con nombre, lugar, horario y la etiqueta Próximo, En curso o Terminado correcta.
+- [x] Con la base sin eventos, Mis eventos muestra "Aún no hay eventos" y el botón "Crear el primero".
+- [x] Después de abrir Mis eventos con conexión, `asistqr:eventos` contiene el listado y `guardadoEn`.
+- [x] Con DevTools en Offline, Mis eventos muestra los eventos guardados, el aviso "Sin conexión · datos guardados el …" y los botones de acción deshabilitados.
+- [x] Offline y sin `asistqr:eventos`, Mis eventos muestra el error de conexión y el botón "Reintentar".
+- [x] Cancelar el `confirm()` de eliminar no borra nada.
+- [x] Aceptar el `confirm()` elimina el evento en el servidor, quita su tarjeta sin recargar y lo quita de `asistqr:eventos`.
+- [x] Guardar el formulario sin nombre, con `fin` anterior a `inicio` o con latitud fuera de rango muestra el error junto al campo y no hace ninguna petición.
+- [x] Crear un evento válido responde 201 y lleva a `#/eventos/:id/qr` del evento nuevo.
+- [x] `#/eventos/:id/editar` aparece precargado con los datos del evento y la hora local correcta.
+- [x] Editar y guardar lleva a `#/mis-eventos` con los datos actualizados.
+- [x] Un evento creado a las 10:00 locales se muestra a las 10:00 en Mis eventos y en el formulario de edición.
+- [x] "Usar mi ubicación" llena latitud y longitud con 6 decimales y muestra la precisión.
+- [x] Al negar el permiso de ubicación aparece el mensaje de permiso negado y los campos siguen editables.
+- [x] Con un PIN guardado incorrecto, crear, editar, eliminar o ver el QR muestra "Tu PIN ya no es válido. Actualízalo en Perfil." con el enlace.
+- [x] Sin conexión, guardar el formulario muestra "Se necesita conexión para esta acción." y no guarda nada.
+- [x] La vista QR muestra la imagen del QR, el token de 6 caracteres y el contador de asistentes.
+- [x] Registrar una asistencia desde Postman hace que el contador del QR suba en 5 s o menos sin recargar.
+- [x] Con la pestaña oculta, la pestaña Red de DevTools no muestra peticiones a `/asistencias`. Al volver, se pide de inmediato.
+- [x] Después de salir de la vista QR o de Asistentes no se hacen más peticiones a `/asistencias`.
+- [x] Si se corta la conexión en la vista QR, el contador conserva el último valor y aparece "Sin conexión · último dato …". Al reconectar se actualiza solo.
+- [x] "Pantalla completa" muestra solo el nombre, el QR, el token y el contador. Esc regresa a la vista normal.
+- [x] Asistentes lista cada registro con nombre, matrícula, hora, etiqueta de estado y la marca "Sincronizado" cuando `offline` es verdadero.
+- [x] Eliminar un registro tras el `confirm()` lo quita de la lista al instante y el total baja en 1.
+- [x] Abrir el QR de un evento eliminado muestra "El evento ya no existe." con el enlace a Mis eventos.
+- [x] En `#/listas`, "Abrir lista" abre en otra pestaña la lista SSR del evento sin pedir el PIN.
+- [x] Los botones "Lista de asistencia" de las vistas QR y Asistentes abren la misma lista SSR.
+- [x] Un evento cuyo nombre es `<b>x</b>` se muestra como texto literal en todas las vistas.
+- [x] Las vistas Mis eventos, QR y Asistentes se ven sin desplazamiento horizontal a 375 px, 768 px y 1280 px.
+- [x] La consola del navegador no muestra errores al recorrer todas las rutas del organizador.
+- [x] `npm test` pasa todos los tests: los anteriores y los nuevos de `test/pwa.test.js`.
 
 ---
 

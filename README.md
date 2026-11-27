@@ -148,9 +148,9 @@ La app es una sola página (`index.html`) que cambia de vista con el hash de la 
 |---|---|---|
 | `#/inicio` | Ambos | Saludo y accesos |
 | `#/perfil` | Ambos | Crear o editar el perfil |
-| `#/escanear` | Alumno | Escanear QR *(en construcción)* |
-| `#/historial` | Alumno | Mi historial *(en construcción)* |
-| `#/eventos` | Alumno | Eventos *(en construcción)* |
+| `#/escanear` | Alumno | Escanear QR con la cámara o escribir el código |
+| `#/historial` | Alumno | Mi historial |
+| `#/eventos` | Alumno | Eventos con filtro por estado |
 | `#/mis-eventos` | Organizador | Mis eventos |
 | `#/nuevo-evento` | Organizador | Crear evento |
 | `#/eventos/:id/editar` | Organizador | Editar evento |
@@ -160,7 +160,15 @@ La app es una sola página (`index.html`) que cambia de vista con el hash de la 
 
 - Sin perfil, cualquier ruta lleva a `#/perfil`.
 - Una ruta que no existe o que es de otro rol lleva a `#/inicio`. `:id` solo acepta enteros positivos (`#/eventos/abc/qr` también lleva a `#/inicio`).
-- La barra superior muestra si hay conexión (**En línea** / **Sin conexión**) y se actualiza sola.
+- La barra superior muestra si hay conexión (**En línea** / **Sin conexión**) y se actualiza sola. Si hay asistencias por enviar, muestra también **N pendientes**.
+
+### Vistas del alumno
+
+- **Escanear QR:** **Activar cámara** pide el permiso y lee el QR con [jsQR](https://github.com/cozmo/jsQR). El código de 6 caracteres también se puede escribir a mano (mayúsculas o minúsculas). Al registrar se pide la ubicación; si se niega o falla, el registro se envía sin ubicación y el servidor lo marca `sin_ubicacion`. Una tarjeta muestra el resultado y el celular vibra distinto en éxito, aviso y error (no en iPhone, que no tiene vibración web).
+- **Mi historial:** muestra al instante lo guardado en el dispositivo y, con conexión, lo completa con `GET /api/asistencias?matricula=X`. Cada fila trae el evento (o el código si aún no se conoce), la hora, la distancia y su etiqueta: Válida, Fuera de rango, Fuera de horario, Sin ubicación, Pendiente de envío, Ya registrada o Rechazada. Muestra la última sincronización y, si hay pendientes, el botón **Enviar ahora**.
+- **Eventos:** tarjetas con filtro Todos / En curso / Próximos / Terminados y el número de eventos de cada uno. Los eventos en curso traen el botón **Escanear**.
+
+**Sin conexión:** cada asistencia se guarda en el dispositivo *antes* de enviarse. Si no hay conexión o el envío falla, queda en la cola y se reenvía sola al volver la conexión, al abrir la app o con **Enviar ahora**. Los reenvíos llegan con `offline: true` (marca *Sincronizado* para el organizador) y el horario se valida con la hora del escaneo. Si el servidor rechaza un registro (código inválido o ya registrado), sale de la cola y queda marcado en el historial. Eventos muestra el último listado guardado.
 
 ### Vistas del organizador
 
@@ -183,6 +191,9 @@ El contador y la lista de asistentes se pausan mientras la pestaña está oculta
 | `asistqr:perfil` | `{ "rol": "alumno", "nombre": "…", "matricula": "…" }` (el organizador no lleva matrícula) |
 | `asistqr:pin` | PIN verificado del organizador (se borra al cambiar a alumno) |
 | `asistqr:eventos` | `{ "guardadoEn": "…", "eventos": [ … ] }`, último listado de `GET /api/eventos` para consultarlo sin conexión |
+| `asistqr:cola` | Lista de cuerpos de `POST /api/asistencias` pendientes de enviar |
+| `asistqr:historial` | Asistencias del alumno con `sincronizacion`: `pendiente`, `enviada` o `rechazada` (y `motivo` si se rechazó) |
+| `asistqr:ultima-sync` | Fecha ISO de la última vez que la cola quedó vacía tras enviar |
 
 Para empezar de cero, ejecuta `localStorage.clear()` en la consola del navegador.
 
@@ -196,6 +207,14 @@ npx --yes sharp-cli -i public/img/logo.svg -o public/img/icono-192.png resize 19
 ```
 
 Vuelve a ejecutarlos si cambias el logo.
+
+### Lector de QR
+
+`public/vendor/jsQR.js` es una copia de la librería jsQR, que está en `devDependencies`. Se sube al repo para que la app no dependa de `node_modules` ni de un CDN. Si actualizas el paquete, vuelve a copiarla:
+
+```bash
+cp node_modules/jsqr/dist/jsQR.js public/vendor/jsQR.js
+```
 
 ## Lista de asistencia (vista del servidor)
 
@@ -220,8 +239,10 @@ public/
   index.html      App de una sola página
   manifest.json   Manifest de la PWA
   img/            Logo SVG e íconos PNG
-  js/             Módulos ES del cliente (router, almacén, API, conexión, formato, ubicación, sondeo)
-    vistas/       Inicio, Perfil, vistas del organizador y "En construcción"
+  js/             Módulos ES del cliente (router, almacén, API, conexión, formato, ubicación, sondeo,
+                  registro, sincronización, escáner, vibración, pendientes)
+    vistas/       Inicio, Perfil y vistas del alumno y del organizador
+  vendor/         Librerías de terceros (jsQR)
   css/            Hoja compilada por Tailwind (generada, no se sube)
 test/             Pruebas (node:test + supertest)
 specs/            Especificaciones por fase

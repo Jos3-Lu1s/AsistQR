@@ -4,6 +4,8 @@
 /* Archivos donde Tailwind busca las clases usadas. */
 @source "../vistas";
 @source "../../public/**/*.{html,js}";
+/* Las librerías de terceros no usan clases de Tailwind. */
+@source not "../../public/vendor";
 
 @theme {
   /* Colores de la identidad visual de AsistQR (clases bg-marca, text-marca, bg-fondo…). */

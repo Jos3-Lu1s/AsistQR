@@ -1,9 +1,11 @@
 // Navegación por hash (#/inicio, #/eventos/12/qr…) con reglas de acceso por rol.
 import { leerPerfil } from './almacen.js';
-import * as enConstruccion from './vistas/en-construccion.js';
+import * as vistaEscanear from './vistas/escanear.js';
 import * as vistaAsistentes from './vistas/evento-asistentes.js';
 import * as vistaFormulario from './vistas/evento-formulario.js';
 import * as vistaQr from './vistas/evento-qr.js';
+import * as vistaEventos from './vistas/eventos.js';
+import * as vistaHistorial from './vistas/historial.js';
 import * as vistaInicio from './vistas/inicio.js';
 import * as vistaListas from './vistas/listas.js';
 import * as vistaMisEventos from './vistas/mis-eventos.js';
@@ -20,9 +22,9 @@ const ID_VALIDO = /^[1-9]\d*$/;
 const RUTAS = {
   '/inicio': { titulo: 'AsistQR', roles: AMBOS, vista: vistaInicio },
   '/perfil': { titulo: 'Perfil', roles: AMBOS, vista: vistaPerfil },
-  '/escanear': { titulo: 'Escanear QR', roles: [ALUMNO], vista: enConstruccion },
-  '/historial': { titulo: 'Mi historial', roles: [ALUMNO], vista: enConstruccion },
-  '/eventos': { titulo: 'Eventos', roles: [ALUMNO], vista: enConstruccion },
+  '/escanear': { titulo: 'Escanear QR', roles: [ALUMNO], vista: vistaEscanear },
+  '/historial': { titulo: 'Mi historial', roles: [ALUMNO], vista: vistaHistorial },
+  '/eventos': { titulo: 'Eventos', roles: [ALUMNO], vista: vistaEventos },
   '/mis-eventos': { titulo: 'Mis eventos', roles: [ORGANIZADOR], vista: vistaMisEventos },
   '/nuevo-evento': { titulo: 'Nuevo evento', roles: [ORGANIZADOR], vista: vistaFormulario },
   '/eventos/:id/editar': { titulo: 'Editar evento', roles: [ORGANIZADOR], vista: vistaFormulario },
