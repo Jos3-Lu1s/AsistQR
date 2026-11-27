@@ -151,13 +151,30 @@ La app es una sola página (`index.html`) que cambia de vista con el hash de la 
 | `#/escanear` | Alumno | Escanear QR *(en construcción)* |
 | `#/historial` | Alumno | Mi historial *(en construcción)* |
 | `#/eventos` | Alumno | Eventos *(en construcción)* |
-| `#/mis-eventos` | Organizador | Mis eventos *(en construcción)* |
-| `#/nuevo-evento` | Organizador | Nuevo evento *(en construcción)* |
-| `#/listas` | Organizador | Lista de asistencia *(en construcción)* |
+| `#/mis-eventos` | Organizador | Mis eventos |
+| `#/nuevo-evento` | Organizador | Crear evento |
+| `#/eventos/:id/editar` | Organizador | Editar evento |
+| `#/eventos/:id/qr` | Organizador | QR del evento con contador en vivo |
+| `#/eventos/:id/asistentes` | Organizador | Asistentes del evento |
+| `#/listas` | Organizador | Lista de asistencia |
 
 - Sin perfil, cualquier ruta lleva a `#/perfil`.
-- Una ruta que no existe o que es de otro rol lleva a `#/inicio`.
+- Una ruta que no existe o que es de otro rol lleva a `#/inicio`. `:id` solo acepta enteros positivos (`#/eventos/abc/qr` también lleva a `#/inicio`).
 - La barra superior muestra si hay conexión (**En línea** / **Sin conexión**) y se actualiza sola.
+
+### Vistas del organizador
+
+- **Mis eventos:** tarjetas con nombre, lugar, horario y estado (Próximo / En curso / Terminado), con accesos a QR, Asistentes, Editar y Eliminar. Eliminar pide confirmación y borra también las asistencias del evento.
+- **Crear / editar evento:** valida los datos antes de enviarlos (fin posterior al inicio, coordenadas en rango, radio entero positivo). El botón **Usar mi ubicación** llena latitud y longitud con el GPS; los campos siguen editables a mano. Al crear, la app abre el QR del evento nuevo.
+- **QR del evento:** imagen del QR, código manual de 6 caracteres y contador de asistentes que se actualiza cada 5 s. **Pantalla completa** deja solo el nombre, el QR, el código y el contador para proyectar (no aparece en navegadores sin esa función, como Safari en iPhone).
+- **Asistentes:** registros del evento (nombre, matrícula, hora, estado, distancia y marca *Sincronizado* si llegó sin conexión), actualizados cada 5 s. Cada registro se puede eliminar.
+- **Lista de asistencia:** elige un evento y abre en otra pestaña la lista generada en el servidor, enviando el PIN guardado.
+
+El contador y la lista de asistentes se pausan mientras la pestaña está oculta y se detienen al salir de la vista.
+
+**Sin conexión:** Mis eventos y Lista de asistencia muestran el último listado guardado con el aviso "Datos guardados". Crear, editar, eliminar, ver el QR y abrir la lista necesitan conexión y lo indican con un mensaje.
+
+**PIN:** si el PIN guardado deja de ser válido, las acciones del organizador muestran "Tu PIN ya no es válido. Actualízalo en Perfil."
 
 ### Datos en el dispositivo (LocalStorage)
 
@@ -165,6 +182,7 @@ La app es una sola página (`index.html`) que cambia de vista con el hash de la 
 |---|---|
 | `asistqr:perfil` | `{ "rol": "alumno", "nombre": "…", "matricula": "…" }` (el organizador no lleva matrícula) |
 | `asistqr:pin` | PIN verificado del organizador (se borra al cambiar a alumno) |
+| `asistqr:eventos` | `{ "guardadoEn": "…", "eventos": [ … ] }`, último listado de `GET /api/eventos` para consultarlo sin conexión |
 
 Para empezar de cero, ejecuta `localStorage.clear()` en la consola del navegador.
 
@@ -202,8 +220,8 @@ public/
   index.html      App de una sola página
   manifest.json   Manifest de la PWA
   img/            Logo SVG e íconos PNG
-  js/             Módulos ES del cliente (router, almacén, API, conexión)
-    vistas/       Inicio, Perfil y "En construcción"
+  js/             Módulos ES del cliente (router, almacén, API, conexión, formato, ubicación, sondeo)
+    vistas/       Inicio, Perfil, vistas del organizador y "En construcción"
   css/            Hoja compilada por Tailwind (generada, no se sube)
 test/             Pruebas (node:test + supertest)
 specs/            Especificaciones por fase
@@ -215,7 +233,7 @@ specs/            Especificaciones por fase
 npm test
 ```
 
-Usan una base de datos en memoria; no tocan `server/data/`. Cubren la API, la lista de asistencia y la entrega de los archivos de la PWA (manifest, splash e íconos). La interfaz de la PWA se prueba a mano en el navegador.
+Usan una base de datos en memoria; no tocan `server/data/`. Cubren la API, la lista de asistencia y la entrega de los archivos de la PWA (manifest, splash, íconos y módulos de las vistas). La interfaz de la PWA se prueba a mano en el navegador.
 
 ## Probar desde el celular
 

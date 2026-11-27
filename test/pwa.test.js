@@ -64,3 +64,22 @@ test('index.html y splash.html enlazan el manifest y el ícono de Apple', async 
     assert.ok(res.text.includes('<link rel="apple-touch-icon" href="/img/icono-192.png">'), ruta);
   }
 });
+
+test('los módulos de las vistas del organizador se sirven como JavaScript', async () => {
+  const { app } = crearAppPrueba();
+  const modulos = [
+    '/js/formato.js',
+    '/js/ubicacion.js',
+    '/js/sondeo.js',
+    '/js/vistas/mis-eventos.js',
+    '/js/vistas/evento-formulario.js',
+    '/js/vistas/evento-qr.js',
+    '/js/vistas/evento-asistentes.js',
+    '/js/vistas/listas.js',
+  ];
+  for (const ruta of modulos) {
+    const res = await request(app).get(ruta);
+    assert.equal(res.status, 200, ruta);
+    assert.match(res.headers['content-type'], /javascript/, ruta);
+  }
+});
